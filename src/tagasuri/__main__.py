@@ -11,7 +11,7 @@ def main():
         help='Input engine file. Required=True.')
     parser.add_argument(
         '--input-file', type=str, required=True,
-        help='Input pgn file. Required=True.')
+        help='Input epd file. Required=True.')
     parser.add_argument(
         '--move-time', type=float, required=False,
         default = 1.0,
