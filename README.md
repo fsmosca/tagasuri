@@ -2,7 +2,7 @@
 An application that will test a computer chess program on epd test suites.
 
 ## Installation
-`pip install tagasuri`
+`pip install -U tagasuri`
 
 ## Dependencies
 Tagasuri is dependent on the following packages:
