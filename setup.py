@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="tagasuri",
-    version='0.2.0',
+    version='0.3.0',
     author='Ferdinand Mosca',
     author_email="ferdymosca@gmail.com",
     description="Test engine on different test sets.",
@@ -30,9 +30,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.7",
     install_requires=[
-          'chess==1.9.2',
-          'pretty-html-table==0.9.16',
-          'pandas==1.4.3'
+          'chess',
+          'pretty-html-table',
+          'pandas'
     ],
     entry_points={
         'console_scripts': [
