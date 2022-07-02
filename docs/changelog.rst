@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+v0.3.0 [2022-07-02]
+^^^^^^^^^^^^^^^^^^^
+
+1. Supports parallel engine analysis with ``--workers`` option
+
+tagasuri epd-test --input-file eret.epd --engine-file stockfish_15_modern.exe --engine-options "{'Hash': 256, 'Threads': 1}" --move-time 5 --workers 4 --output-file eret.txt
+
+
 v0.2.0 [2022-07-02]
 ^^^^^^^^^^^^^^^^^^^
 
