@@ -47,12 +47,15 @@ class EpdTest:
         self.outputfile = outputfile
         self.masterfile = masterfile
         self.movetime = movetime
-        self.enginename = None
         self.workers = workers
 
         if engineoptions is not None:
             self.engineoptions = literal_eval(engineoptions)
         self.inputfilename = Path(inputfile).name
+
+        engine = chess.engine.SimpleEngine.popen_uci(self.enginefile)
+        self.enginename = engine.id['name']
+        engine.quit()
 
     def get_epds(self) -> List:
         """Converts epd file to a list.
@@ -66,6 +69,12 @@ class EpdTest:
                 line = lines.rstrip()
                 epds.append(line)
         return epds
+
+    def get_master(self) -> None:
+        """Get contents of master.csv file.]
+        """
+        df = pd.read_csv(self.masterfile, names=master_header)
+        return df
 
     def save_to_master(self, df: pd.DataFrame) -> None:
         """Save epd analysis per engine.
@@ -131,14 +140,13 @@ class EpdTest:
         """
         data = []
         engine = chess.engine.SimpleEngine.popen_uci(self.enginefile)
-        self.enginename = engine.id['name']
         if self.engineoptions is not None:
             for k, v in self.engineoptions.items():
                 if k in engine.options:
                     engine.configure({k: v})
 
         for epd in epds:
-            # print(epd)
+            logging.info(epd)
             ok = 0
             board, info = chess.Board.from_epd(epd)
             bms = info.get('bm', None)
@@ -169,6 +177,8 @@ class EpdTest:
                 ams_h = ' '.join(ams_l)
             else:
                 ams_h = None
+
+            logging.info(f'solved: {ok}')
 
             sanmv = board.san(move)
             data.append(
