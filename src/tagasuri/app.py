@@ -15,3 +15,11 @@ def epd_test(
     dfs.columns = ['Name', 'Total', 'Correct', 'Pct', 'Time', 'EPDFile']
     dfs = dfs.sort_values(by=['Correct'], ascending=[False])
     a.save_output(dfs, outputfile)
+
+    # Save unsolved
+    dfm = a.get_master()
+    dfu = dfm.loc[(dfm.Name == a.enginename) &
+        (dfm.Time == a.movetime) &
+        (dfm.EPDFile == a.inputfilename) &
+        (dfm.Hit == 0)]
+    a.save_output(dfu, f'unsolved_{a.inputfilename[:-4]}_{a.movetime}s_{a.enginename}.txt')
