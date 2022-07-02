@@ -15,11 +15,14 @@ Attributes:
 from pathlib import Path
 from typing import List, Optional
 from ast import literal_eval
+import concurrent.futures
+from concurrent.futures import ProcessPoolExecutor
 
 import chess
 import chess.engine
 import pandas as pd
 from pretty_html_table import build_table
+import numpy as np
 
 
 master_header = ['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time',
@@ -29,7 +32,7 @@ master_header = ['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time',
 class EpdTest:
     def __init__(self, enginefile: str, inputfile: str, outputfile: str,
                  masterfile: str = 'master.csv',  movetime: float = 1.0,
-                 engineoptions: Optional[str] = None):
+                 engineoptions: Optional[str] = None, workers: int = 1):
         self.enginefile = enginefile
         self.engineoptions = engineoptions
         self.inputfile = inputfile
@@ -37,6 +40,7 @@ class EpdTest:
         self.masterfile = masterfile
         self.movetime = movetime
         self.enginename = None
+        self.workers = workers
 
         if engineoptions is not None:
             self.engineoptions = literal_eval(engineoptions)
@@ -109,7 +113,7 @@ class EpdTest:
         else:
             df.to_string(fn, index=False)
 
-    def run(self) -> pd.DataFrame:
+    def run(self, epds) -> pd.DataFrame:
         """Test the engine on the test file.
 
         Save number of correct and all positins counts.
@@ -125,8 +129,8 @@ class EpdTest:
                 if k in engine.options:
                     engine.configure({k: v})
 
-        for epd in self.get_epds():
-            print(epd)
+        for epd in epds:
+            # print(epd)
             ok = 0
             board, info = chess.Board.from_epd(epd)
             bms = info.get('bm', None)
@@ -164,4 +168,26 @@ class EpdTest:
                  ok, self.movetime, self.enginename, self.inputfilename])
         engine.quit()
         df = pd.DataFrame(data, columns=master_header)
+        return df
+
+    def start(self):
+        job_list = []
+        epds = self.get_epds()
+        splits = np.array_split(epds, self.workers)
+        dflist = []
+
+        with ProcessPoolExecutor(max_workers=self.workers) as executor:
+            for epdv in splits:
+                s_epd = list(epdv)
+                job = executor.submit(self.run, s_epd)
+                job_list.append(job)
+
+            for future in concurrent.futures.as_completed(job_list):
+                try:
+                    df = future.result()
+                    dflist.append(df)
+                except concurrent.futures.process.BrokenProcessPool as ex:
+                    print(f'{ex}')
+
+        df = pd.concat(dflist)
         return df
