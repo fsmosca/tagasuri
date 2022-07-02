@@ -41,6 +41,8 @@ If your processor has a quad or 4 cores, you can increase the workers to 3 with 
 *All test results are saved in master.csv file. If Hit value is 1 that means the puzzle is solved.*
 
 ```
+c:\tmp_tagasuri> python
+
 >>> import pandas as pd
 
 >>> df = pd.read_csv('master.csv', names=['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time', 'Name', 'EPDFile'])
