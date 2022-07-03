@@ -23,6 +23,7 @@ import chess.engine
 import pandas as pd
 from pretty_html_table import build_table
 import numpy as np
+from tagasuri.logging import create_log_handler
 
 
 master_header = ['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time',
@@ -32,7 +33,8 @@ master_header = ['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time',
 class EpdTest:
     def __init__(self, enginefile: str, inputfile: str, outputfile: str,
                  masterfile: str = 'master.csv',  movetime: float = 1.0,
-                 engineoptions: Optional[str] = None, workers: int = 1):
+                 engineoptions: Optional[str] = None, workers: int = 1,
+                 islogging: bool = False):
         self.enginefile = enginefile
         self.engineoptions = engineoptions
         self.inputfile = inputfile
@@ -40,6 +42,7 @@ class EpdTest:
         self.masterfile = masterfile
         self.movetime = movetime
         self.workers = workers
+        self.islogging = islogging
 
         if engineoptions is not None:
             self.engineoptions = literal_eval(engineoptions)
@@ -122,7 +125,7 @@ class EpdTest:
         else:
             df.to_string(fn, index=False)
 
-    def run(self, epds) -> pd.DataFrame:
+    def run(self, epds, num) -> pd.DataFrame:
         """Test the engine on the test file.
 
         Save number of correct and all positins counts.
@@ -130,14 +133,22 @@ class EpdTest:
         Returns:
           A dataframe of analysis results.
         """
+        if self.islogging:
+            logger = create_log_handler(f'run_{num}')
+            logger.info(f'engine: {self.enginename}')
+
         data = []
         engine = chess.engine.SimpleEngine.popen_uci(self.enginefile)
+        if self.islogging:
+            logger.info(engine.options)
         if self.engineoptions is not None:
             for k, v in self.engineoptions.items():
                 if k in engine.options:
                     engine.configure({k: v})
+                    logger.info(f'set {k} to value {v}')
 
         for epd in epds:
+            logger.info(epd)
             ok = 0
             board, info = chess.Board.from_epd(epd)
             bms = info.get('bm', None)
@@ -147,7 +158,15 @@ class EpdTest:
             result = engine.analyse(
                 board,
                 chess.engine.Limit(time=self.movetime), game=object())
+
+            if self.islogging:
+                logger.info(result)
+
             move = result['pv'][0]
+            sanmv = board.san(move)
+
+            if self.islogging:
+                logger.info(f'engine bestmove: {sanmv}')
 
             if bms is not None and ams is not None:
                 if move in bms and move not in ams:
@@ -156,6 +175,9 @@ class EpdTest:
                 ok = 1
             elif ams is not None and move not in ams:
                 ok = 1
+
+            if self.islogging:
+                logger.info(f'solved: {ok}')
 
             if bms is not None:
                 bms_l = [board.san(m) for m in bms]
@@ -169,7 +191,6 @@ class EpdTest:
             else:
                 ams_h = None
 
-            sanmv = board.san(move)
             data.append(
                 [bepd, id, bms_h, ams_h, sanmv,
                  ok, self.movetime, self.enginename, self.inputfilename])
@@ -184,9 +205,9 @@ class EpdTest:
         dflist = []
 
         with ProcessPoolExecutor(max_workers=self.workers) as executor:
-            for epdv in splits:
+            for i, epdv in enumerate(splits):
                 s_epd = list(epdv)
-                job = executor.submit(self.run, s_epd)
+                job = executor.submit(self.run, s_epd, i)
                 job_list.append(job)
 
             for future in concurrent.futures.as_completed(job_list):

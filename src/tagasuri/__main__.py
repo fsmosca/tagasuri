@@ -52,6 +52,9 @@ def main():
         help='The number of workers to work on the epd to speed up the process. '
         'If your processor has quad or 4 cores, you may use 3 cores. '
         'Required=False, default=1.')
+    epdtest.add_argument(
+        '--islogging', action='store_true',
+        help='Log output to file by process id.')
 
     parser.add_argument(
         '-v', '--version',
@@ -68,7 +71,8 @@ def main():
         epd_test(
             args.engine_file, args.input_file, args.output_file,
             masterfile=args.master_file, movetime=args.move_time,
-            engineoptions=args.engine_options, workers=args.workers)
+            engineoptions=args.engine_options, workers=args.workers,
+            islogging=args.islogging)
 
 
 if __name__ == '__main__':

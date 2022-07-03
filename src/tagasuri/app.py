@@ -3,11 +3,13 @@ from tagasuri.epd import EpdTest
 
 def epd_test(
         enginepath, inputfile, outputfile, masterfile: str = 'master.csv',
-        movetime: float = 1.0, engineoptions: str = None, workers: int = 1):
+        movetime: float = 1.0, engineoptions: str = None, workers: int = 1,
+        islogging: bool = False):
 
     a = EpdTest(
         enginepath, inputfile, outputfile, masterfile=masterfile,
-        movetime=movetime, engineoptions=engineoptions, workers=workers)
+        movetime=movetime, engineoptions=engineoptions, workers=workers,
+        islogging=islogging)
 
     df = a.start()
     a.save_to_master(df)
