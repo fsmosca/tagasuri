@@ -22,6 +22,8 @@ Test the engine with a chess puzzle in epd file.
 tagasuri epd-test --input-file "7men_human.epd" --engine-file "c:/engines/sf15.exe" --engine-options "{'Hash': 128, 'Threads': 1}" --workers 1 --move-time 1 --output-file 7men.txt
 ```
 
+Unsolved puzzles are saved in `unsolved_7men_human_1.0s_Stockfish 15.txt.`
+
 Sample output
 
 ```
@@ -61,15 +63,6 @@ c:\tmp_tagasuri> python
 1109    8/8/8/4Rpk1/3r4/5Pp1/8/5K2 w - -  7menhuman_1110  Kg2 NaN   Kg2    1   1.0  Stockfish 15  7men_human.epd
 ```
 
-*Show unsolved puzzles*
-```
->>> dfu = df.loc[df.Hit == 0]
->>> dfu
-                                    EPD             ID   Bm  Am EngMv  Hit  Time          Name         EPDFile
-205   8/2k5/3b4/8/3n3R/8/5PP1/5K2 b - -  7menhuman_206  Bc5 NaN   Ne6    0   1.0  Stockfish 15  7men_human.epd
-437     8/PR6/5k2/6p1/8/r7/4KP2/8 w - -  7menhuman_438   f3 NaN   Kd2    0   1.0  Stockfish 15  7men_human.epd
-638  8/4k3/R7/1p4p1/2b5/8/6P1/6K1 w - -  7menhuman_639  Kf2 NaN   Rb6    0   1.0  Stockfish 15  7men_human.epd
-```
 
 ## Access help
 
