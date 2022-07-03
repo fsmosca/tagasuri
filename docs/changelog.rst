@@ -2,6 +2,15 @@ Change Log
 ==========
 
 
+v0.4.2 [2022-07-03]
+^^^^^^^^^^^^^^^^^^^
+
+* Add logging by process id with islogging flag.
+
+::
+   tagasuri epd-test --input-file 7men_human.epd --islogging ...
+
+
 v0.4.1 [2022-07-03]
 ^^^^^^^^^^^^^^^^^^^
 
