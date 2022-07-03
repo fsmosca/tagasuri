@@ -1,8 +1,13 @@
 # Tagasuri
 An application that will test a computer chess program on epd test suites.
 
+It detects avoid move `am` and supports parallel test for processors with more than 1 core.
+
+All test results are saved in master.csv file for later processing. Output summary can be saved either in csv, txt and html file formats.
+
 ## Installation
 `pip install -U tagasuri`
+
 
 ## Dependencies
 Tagasuri is dependent on the following packages:
@@ -62,6 +67,10 @@ c:\tmp_tagasuri> python
 1108  5k2/R7/8/1K1N4/6r1/1P3p2/8/8 b - -  7menhuman_1109   f2 NaN    f2    1   1.0  Stockfish 15  7men_human.epd
 1109    8/8/8/4Rpk1/3r4/5Pp1/8/5K2 w - -  7menhuman_1110  Kg2 NaN   Kg2    1   1.0  Stockfish 15  7men_human.epd
 ```
+
+## Link
+
+* [tagasuri python package](https://pypi.org/project/tagasuri/)
 
 
 ## Access help
