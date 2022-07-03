@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="tagasuri",
-    version='0.4.0',
+    version='0.4.1',
     author='Ferdinand Mosca',
     author_email="ferdymosca@gmail.com",
     description="Test engine on different test sets.",

@@ -17,20 +17,12 @@ from typing import List, Optional
 from ast import literal_eval
 import concurrent.futures
 from concurrent.futures import ProcessPoolExecutor
-import logging
 
 import chess
 import chess.engine
 import pandas as pd
 from pretty_html_table import build_table
 import numpy as np
-
-
-logging.basicConfig(filename='tagasuri_log.txt',
-                    filemode='w',
-                    format='%(asctime)s %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
 
 
 master_header = ['EPD', 'ID', 'Bm', 'Am', 'EngMv', 'Hit', 'Time',
@@ -146,7 +138,6 @@ class EpdTest:
                     engine.configure({k: v})
 
         for epd in epds:
-            logging.info(epd)
             ok = 0
             board, info = chess.Board.from_epd(epd)
             bms = info.get('bm', None)
@@ -177,8 +168,6 @@ class EpdTest:
                 ams_h = ' '.join(ams_l)
             else:
                 ams_h = None
-
-            logging.info(f'solved: {ok}')
 
             sanmv = board.san(move)
             data.append(
