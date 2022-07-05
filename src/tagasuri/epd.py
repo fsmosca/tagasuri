@@ -4,11 +4,16 @@ Analyze epd test with the engine.
 
 Attributes:
   enginefile: The path/filename or filename of the engine to be tested.
-  epdfn: The epd test file.
+  inputfile: The epd test file.
+  outputfile: The summary output of the engine.
+  masterfile: All analysis are stored in the file. It can be used to
+              generate engine results summary, unsolved test and others.
   movetime: Analysis time in seconds.
-  correct: The number of correct solutions found by engine.
-  totalpos: The total number of positions in the epd file.
-  inputfilename: The filename of epd file.
+  engineoptions: Engine options like Hash and Threads.
+  workers: Number of cores to use to work on the test. If your processor
+           has 4 cores for example, you can use --workers 3.
+  islogging: To log engine output and other per worker.
+  enginename: To change engine name for display purposes.
 """
 
 
