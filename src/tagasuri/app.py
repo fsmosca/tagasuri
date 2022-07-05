@@ -1,15 +1,17 @@
+from typing import Optional
 from tagasuri.epd import EpdTest
 
 
 def epd_test(
         enginepath, inputfile, outputfile, masterfile: str = 'master.csv',
-        movetime: float = 1.0, engineoptions: str = None, workers: int = 1,
-        islogging: bool = False):
+        movetime: float = 1.0, engineoptions: Optional[str] = None,
+        workers: int = 1, islogging: bool = False,
+        enginename: Optional[str] = None):
 
     a = EpdTest(
         enginepath, inputfile, outputfile, masterfile=masterfile,
         movetime=movetime, engineoptions=engineoptions, workers=workers,
-        islogging=islogging)
+        islogging=islogging, enginename=enginename)
 
     df = a.start()
     a.save_to_master(df)
