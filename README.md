@@ -73,7 +73,8 @@ c:\tmp_tagasuri> python
 * [tagasuri python package](https://pypi.org/project/tagasuri/)
 
 
-## Access help
+## Help
+Access help from command line.
 
 `tagasuri -h`
 
