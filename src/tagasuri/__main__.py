@@ -55,6 +55,9 @@ def main():
     epdtest.add_argument(
         '--islogging', action='store_true',
         help='Log output to file by process id.')
+    epdtest.add_argument(
+        '--engine-name', type=str, required=False, default=None,
+        help='Engine name, if not specified it will use engine id name.')
 
     parser.add_argument(
         '-v', '--version',
@@ -72,7 +75,7 @@ def main():
             args.engine_file, args.input_file, args.output_file,
             masterfile=args.master_file, movetime=args.move_time,
             engineoptions=args.engine_options, workers=args.workers,
-            islogging=args.islogging)
+            islogging=args.islogging, enginename=args.engine_name)
 
 
 if __name__ == '__main__':
