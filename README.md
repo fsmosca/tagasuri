@@ -84,3 +84,17 @@ c:\tmp_tagasuri> python
 * [Pandas](https://pandas.pydata.org/)
 * [pretty-html-table](https://pypi.org/project/pretty-html-table/)
 
+## Change Log
+
+### Version 0.5.0 [2022-07-05]
+
+**Bug fix**
+* Fix logging
+
+**New Feature**
+* Add --engine-name option
+
+Example:  
+`tagasuri epd-test --engine-name "Lc0 0.29 rc0" --engine-file "c:/chess/engines/lc0/lc0_0.29/lc0.exe" ...`
+
+
