@@ -34,7 +34,7 @@ class EpdTest:
     def __init__(self, enginefile: str, inputfile: str, outputfile: str,
                  masterfile: str = 'master.csv',  movetime: float = 1.0,
                  engineoptions: Optional[str] = None, workers: int = 1,
-                 islogging: bool = False):
+                 islogging: bool = False, enginename: Optional[str] = None):
         self.enginefile = enginefile
         self.engineoptions = engineoptions
         self.inputfile = inputfile
@@ -43,14 +43,16 @@ class EpdTest:
         self.movetime = movetime
         self.workers = workers
         self.islogging = islogging
+        self.enginename = enginename
 
         if engineoptions is not None:
             self.engineoptions = literal_eval(engineoptions)
         self.inputfilename = Path(inputfile).name
 
-        engine = chess.engine.SimpleEngine.popen_uci(self.enginefile)
-        self.enginename = engine.id['name']
-        engine.quit()
+        if self.enginename is None:
+            engine = chess.engine.SimpleEngine.popen_uci(self.enginefile)
+            self.enginename = engine.id['name']
+            engine.quit()
 
     def get_epds(self) -> List:
         """Converts epd file to a list.
