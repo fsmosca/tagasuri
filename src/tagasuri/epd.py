@@ -145,10 +145,12 @@ class EpdTest:
             for k, v in self.engineoptions.items():
                 if k in engine.options:
                     engine.configure({k: v})
-                    logger.info(f'set {k} to value {v}')
+                    if self.islogging:
+                        logger.info(f'set {k} to value {v}')
 
         for epd in epds:
-            logger.info(epd)
+            if self.islogging:
+                logger.info(epd)
             ok = 0
             board, info = chess.Board.from_epd(epd)
             bms = info.get('bm', None)
